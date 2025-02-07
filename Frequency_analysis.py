@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[ ]:
+
+
 import matplotlib.pyplot as plt
 from collections import OrderedDict
 
@@ -6,6 +12,7 @@ ENGLISH_FREQUENCY_DICTIONARY = {
     "H": 5.92, 'I': 7.31, "J": 0.10, "K": 0.69, "L": 3.98, "M": 2.61, "N": 6.95, "O": 7.68, "P": 1.82,
     "Q": 0.11, "R": 6.02, "S": 6.28, "T": 9.10, "U": 2.88, "V": 1.11, "W": 2.09, "X": 0.17, "Y": 2.11, "Z": 0.07
 }
+DECRYPT_KEY_DICTIONARY = {}
 
 ENGLISH_FREQUENCY_ORDERED_LIST = [letter for letter, _ in sorted(ENGLISH_FREQUENCY_DICTIONARY.items(), key=lambda item: item[1], reverse=True)]
 
@@ -65,15 +72,29 @@ def auto_decrypt(encrypted_message: str, frequency_ordered: dict) -> str:
     decrypt_key_dictionary = frequency_ordered
     #print(decrypt_key_dictionary)
     for index, key in enumerate(decrypt_key_dictionary.keys()):
-        decrypt_key_dictionary[key] = ENGLISH_FREQUENCY_ORDERED_LIST[index]
+        DECRYPT_KEY_DICTIONARY[key] = ENGLISH_FREQUENCY_ORDERED_LIST[index]
     #print(decrypt_key_dictionary)
     for character in encrypted_message:
         if not character.isalpha():
             decrypted_message += character
             continue
-        decrypted_message += decrypt_key_dictionary[character]
+        decrypted_message += DECRYPT_KEY_DICTIONARY[character]
 
     return decrypted_message
+
+
+def replace_letter(encrypted_message, cipher_letter, new_letter):
+    encrypted_message = format_encrypted_message(encrypted_message, "1")
+    decrypted_message = ""
+    DECRYPT_KEY_DICTIONARY[cipher_letter] = new_letter
+    for character in encrypted_message:
+        if not character.isalpha():
+            decrypted_message += character
+            continue
+        decrypted_message += DECRYPT_KEY_DICTIONARY[character]
+
+    return decrypted_message
+
 
 
 if __name__ == "__main__":
@@ -87,3 +108,11 @@ if __name__ == "__main__":
         frequency_ordered = plot_frequency_dictionary(frequency_dictionary)
         decrypted_message = auto_decrypt(encrypted_message, frequency_ordered)
         print(f"The decrypted message is:\n{decrypted_message}")
+        cipher_letter = input('Enter cipher letter to replace(Enter .. to exit): ')
+        if cipher_letter == "..":
+            break
+        while cipher_letter != "..":
+            new_letter= input('Enter new letter to replace with:')
+            decrypted_message=replace_letter(encrypted_message, cipher_letter, new_letter)
+            print(f"The decrypted message is:\n{decrypted_message}")
+            cipher_letter = input('Enter cipher letter to replace(Enter .. to exit): ')
