@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 import matplotlib.pyplot as plt
 from collections import OrderedDict
 
@@ -84,6 +78,9 @@ def auto_decrypt(encrypted_message: str, frequency_ordered: dict) -> str:
 
 
 def replace_letter(encrypted_message, cipher_letter, new_letter):
+    '''
+    Replaces cipher letter in dictionary with suggested new letter
+    '''
     encrypted_message = format_encrypted_message(encrypted_message, "1")
     decrypted_message = ""
     DECRYPT_KEY_DICTIONARY[cipher_letter] = new_letter
@@ -99,7 +96,7 @@ def replace_letter(encrypted_message, cipher_letter, new_letter):
 
 if __name__ == "__main__":
     while True:
-        encrypted_message = input('Enter encrypted message(Enter .. to exit): ')
+        encrypted_message = input('Enter encrypted message(Enter .. to exit): \n')
         if  encrypted_message == "..":
            break
         frequency_dictionary = frequency_analysis(encrypted_message)
@@ -107,12 +104,14 @@ if __name__ == "__main__":
         #print(f"The frequency dictionary is {frequency_dictionary}")
         frequency_ordered = plot_frequency_dictionary(frequency_dictionary)
         decrypted_message = auto_decrypt(encrypted_message, frequency_ordered)
+        print(f"Inputted message: \n{encrypted_message}")
         print(f"The decrypted message is:\n{decrypted_message}")
         cipher_letter = input('Enter cipher letter to replace(Enter .. to exit): ')
         if cipher_letter == "..":
             break
         while cipher_letter != "..":
             new_letter= input('Enter new letter to replace with:')
-            decrypted_message=replace_letter(encrypted_message, cipher_letter, new_letter)
+            decrypted_message=replace_letter(encrypted_message, cipher_letter.upper(), new_letter.upper())
+            print(f"Inputted message: \n{encrypted_message}")
             print(f"The decrypted message is:\n{decrypted_message}")
-            cipher_letter = input('Enter cipher letter to replace(Enter .. to exit): ')
+            cipher_letter = input('\nEnter cipher letter to replace(Enter .. to exit): ')
